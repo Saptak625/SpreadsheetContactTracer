@@ -7,7 +7,7 @@ This version has following:
 * 2 distinct Google Login links for teachers and students
 * Basic Flask Webage Flow
 * Flask-Login + User Model + User Database
-* Jinja2 + Flask: Html render_template(Maybe still require layout templating depending on how repititive html files are)
+* Jinja2 + Flask: Html render_template(Maybe still require layout templating depending on how repetitive html files are)
 
 ### Partially-integrated features:
 * Retainment of Flask-Login current_user
