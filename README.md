@@ -1,6 +1,6 @@
 # SpreadsheetContactTracer
 
-## Most Recent Version: .0
+## Most Recent Version: 6.0
 This version has following:
 
 ### Fully integrated features:
@@ -15,5 +15,4 @@ This version has following:
 * Manage Classroom
 
 ### Things to Implement Next Version:
-* HTML/Bootstrap Refinement
 * Excelification, CRON, Database Reset
