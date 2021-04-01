@@ -1,0 +1,1 @@
+"C:\Users\halde_000.SUBHASHIS-PC\AppData\Local\Programs\Python\Python39\python.exe" "C:\Users\halde_000.SUBHASHIS-PC\Documents\Saptak's Python Files\Spreadsheet Contact Tracing Flask Final\reset.py"
