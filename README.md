@@ -1,6 +1,6 @@
 # SpreadsheetContactTracer
 
-## How it Works
+## How it Works?
 ### Teachers/Admin
 Teachers/Admin play the following roles in this application:
 * Creator and Manager of Classrooms
