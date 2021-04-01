@@ -1,7 +1,18 @@
 # SpreadsheetContactTracer
 
-## Most Recent Version: Final Version
-This version has following:
+## How it Works
+### Teachers/Admin
+Teachers/Admin play the following roles in this application:
+* Creator and Manager of Classrooms
+* Access Classroom Information such as QR Codes and Excel Reports
+* Recipient of Daily Email for Contact Tracing Records in form of Excel file
+
+### Students
+Students play the following roles in this application:
+* Scan QR Codes to log information accordingly. The more strictly followed, the better the contact tracing results will be.
+
+## Most Recent Stable Release: Final Version
+This release has:
 
 ### Integrated Features:
 * 2 distinct Google Login links for teachers and students
