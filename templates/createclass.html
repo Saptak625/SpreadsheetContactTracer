@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Teacher Homepage</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand active" href="teacherhomepage">DASD Desk Tracer</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="createclass">Create Classes</a></li>
+            <li><a href="manageclasses">Manage Classes</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="teacherprelogin"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% if not submitted %}
+            <h1>Create New Class</h1>
+            <hr />
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.name.label(class="form-control-label") }}
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control form-control-lg is-invalid", style="border-color: #dc3545;") }}
+                        <div style="width: 100%; margin-top: .25rem; font-size: 80%; color: #dc3545;">
+                            {% for error in form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.numOfSeats.label(class="form-control-label") }}
+                    {% if form.numOfSeats.errors %}
+                        {{ form.numOfSeats(class="form-control form-control-lg is-invalid", style="border-color: #dc3545;") }}
+                        <div style="width: 100%; margin-top: .25rem; font-size: 80%; color: #dc3545;">
+                            {% for error in form.numOfSeats.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.numOfSeats(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+        {% else %}
+            <div class="d-flex justify-content-between" style="display: flex!important; justify-content: space-between!important;">
+              <div class="float-left item">
+                    <h1 class="text-left">{{ classInfo['name'] }}</h1>
+                    <h4 class="text-left">Class Size: {{ classInfo['numOfSeats'] }}</h4>
+                </div>
+                <div class="float-right item" style="margin-right: 30px;">
+                    <h4>QR Codes:</h4> 
+                    <span class="glyphicon glyphicon-download-alt"></span>
+                    <a href="Zips/{{ classInfo['qrPath'] }}">{{ classInfo['qrPath'] }}</a>
+                </div>
+            </div>
+            <hr>
+            <center>
+                <p>This information can be accessed again in the Manage Classroom page.</p>
+                <a href="teacherhomepage"><button type="button" class="btn btn-primary btn-md">Return to Homepage</button></a>
+            </center>
+        {% endif %}
+    </div>
+</body>
+</html>

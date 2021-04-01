@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Teacher Homepage</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand active" href="teacherhomepage">DASD Desk Tracer</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="createclass">Create Classes</a></li>
+            <li><a href="manageclasses">Manage Classes</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="teacherprelogin"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+    <div class="container">
+        <h1>Manage your Classes</h1>
+        <hr>
+        {% if classroomResults != [] %}
+            <div class="container">
+                <table class="table">
+                  <thead class="thead-dark" style="color: #fff; background-color: #212529; border-color: #32383e;">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Class Size</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for class in classroomResults %}
+                        <tr>
+                          <td><p>{{ class[0] }}</p></td>
+                          <td><p>{{ class[1] }}</p></td>
+                          <td>
+                            <div class="d-flex flex-column">
+                              <div class="p-2">
+                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                    <a href="Zips/{{ class[0] }}.zip">QR Codes</a>
+                              </div>
+                              <div class="p-2">
+                                    <span class="glyphicon glyphicon-list-alt"></span>
+                                    <a href="Excel/{{ class[0] }}.xlsx">Excel Records</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+        {% else %}
+        <center>
+            <h4>You currently don't have any classes! Make your first class by clicking below!</h4>
+            <a href="createclass"><button type="button" class="btn btn-primary btn-md">Create New Class</button></a>
+        </center>
+        {% endif %}
+    </div>
+
+</body>
+</html>
