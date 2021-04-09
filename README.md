@@ -11,7 +11,7 @@ Teachers/Admin play the following roles in this application:
 Students play the following roles in this application:
 * Scan QR Codes to log information accordingly. The more strictly followed, the better the contact tracing results will be.
 
-## Most Recent Stable Release: Final Version
+## Most Recent Stable Release: Release 1.0
 This release has:
 
 ### Integrated Features:
