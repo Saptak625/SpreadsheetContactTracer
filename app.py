@@ -311,8 +311,8 @@ def teacherCallback():
         users_name = userinfo_response.json()["name"]
 
         #MAKE SURE USER IS TEACHER: DASD TEACHER ONLY
-        if '@dasd.org' not in users_email:
-            abort(403)
+        # if '@dasd.org' not in users_email:
+        #     abort(403)
     else:
         return "User email not available or not verified by Google.", 
 
