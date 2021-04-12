@@ -52,6 +52,19 @@
                     {% endif %}
                 </div>
                 <div class="form-group">
+                    {{ form.physicalName.label(class="form-control-label") }}
+                    {% if form.physicalName.errors %}
+                        {{ form.physicalName(class="form-control form-control-lg is-invalid", style="border-color: #dc3545;") }}
+                        <div style="width: 100%; margin-top: .25rem; font-size: 80%; color: #dc3545;">
+                            {% for error in form.physicalName.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.physicalName(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
                     {{ form.numOfSeats.label(class="form-control-label") }}
                     {% if form.numOfSeats.errors %}
                         {{ form.numOfSeats(class="form-control form-control-lg is-invalid", style="border-color: #dc3545;") }}

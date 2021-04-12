@@ -6,7 +6,8 @@ def init_db_local():
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE classroom (name TEXT, numOfSeats INTEGER, owner TEXT, ownerEmail TEXT)")
-    cursor.execute("CREATE TABLE entries (name TEXT, email TEXT, classroomid TEXT, deskNumber INTEGER, entryTime TEXT)")
+    cursor.execute("CREATE TABLE entries (name TEXT, email TEXT, classroomid TEXT, physicalclassroomid TEXT, deskNumber INTEGER, entryTime TEXT)")
+    cursor.execute("CREATE TABLE physicalclassroom (name TEXT, numOfSeats INTEGER)")
     connection.commit()
     connection.close()
 
@@ -16,6 +17,17 @@ def addClassroom(classroom):
     cursor.execute("INSERT INTO classroom VALUES (?, ?, ?, ?)", [classroom.name, classroom.numOfSeats, classroom.owner.name, classroom.owner.email])
     connection.commit()
     connection.close()
+    #Check if physical classroom exists
+    if classroom.roomId != None:
+        connection = sqlite3.connect("sqlite.db")
+        cursor = connection.cursor()
+        results = cursor.execute("SELECT name, numOfSeats FROM physicalclassroom").fetchone()
+        if results == None:
+            cursor.execute("INSERT INTO physicalclassroom VALUES (?, ?)", [classroom.roomId, classroom.numOfSeats])
+        connection.commit()
+        connection.close()
+        return results
+
 
 def queryByName(queryName):
     connection = sqlite3.connect("sqlite.db")

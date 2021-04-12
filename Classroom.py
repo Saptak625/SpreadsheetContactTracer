@@ -8,8 +8,9 @@ from openpyxl.styles import Font, Alignment
 import datetime
 
 class Classroom:
-    def __init__(self, name, numOfSeats, owner, from_database = False):
+    def __init__(self, name, numOfSeats, owner, roomId=None, from_database = False):
         self.name = name
+        self.roomId = roomId
         self.numOfSeats = numOfSeats
         self.owner = owner
         if not from_database:
@@ -41,7 +42,7 @@ class Classroom:
                 file_paths.append(filepath)
 
         # writing files to a zipfile
-        with ZipFile(f'Zips/{self.name}.zip','w') as zip:
+        with ZipFile(f'{self.name}.zip','w') as zip:
             # writing each file one by one
             for file in file_paths:
                 zip.write(file)

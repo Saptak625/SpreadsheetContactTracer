@@ -125,7 +125,10 @@ def downloadZipFile(path):
     classroom = Classroom(results[0], results[1], results[2], from_database = True)
     classroom.generateQRCodes()
     try:
-        return send_from_directory('Zips', path, as_attachment=True)
+        return send_file(f'{path}',
+            mimetype = 'zip',
+            attachment_filename= f'{path}',
+            as_attachment = True)
     except FileNotFoundError:
         abort(404)
 
@@ -169,7 +172,8 @@ def createClass():
         if form.validate_on_submit():
             name=str(request.form['name'])
             numOfSeats=int(request.form['numOfSeats'])
-            classroom = Classroom(name, numOfSeats, current_user)
+            physicalName = str(request.form['physicalName'])
+            classroom = Classroom(name, numOfSeats, current_user, roomId=physicalName)
             flash("Class Created Successfully!", 'success')
             classInfo = {'name': name, 'numOfSeats': numOfSeats, 'qrPath': classroom.generateQRCodes()}
             submitted = True

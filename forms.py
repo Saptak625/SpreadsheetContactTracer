@@ -7,6 +7,8 @@ from dbFunctions import queryByName
 class CreateNewClassroomForm(FlaskForm):
     name = StringField('Name Of Class: ',
                         validators=[DataRequired()])
+    physicalName = StringField('Room Name: ',
+                        validators=[DataRequired()])
     numOfSeats = IntegerField('Number of Seats: ', validators=[DataRequired(), NumberRange(min=1, message="Number of Seats must be at least 1")])
     submit = SubmitField('Submit')   
 
