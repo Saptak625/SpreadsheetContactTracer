@@ -95,4 +95,5 @@ def queryByPhysicalEntries(physicalClassroom):
     connection.close()
     newEntries = []
     for classroom in results:
-        newEntries += queryForEntries(classroom)
+        newEntries += queryForEntries(classroom[0])
+    return newEntries

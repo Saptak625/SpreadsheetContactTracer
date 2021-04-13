@@ -13,30 +13,42 @@ def generateQRCode(msg, filename):
   img.save(filename)
 
 #Emailer
-def sendEmailWithXlsxAttachment(EMAIL_ADDRESS, PASSWORD, listOfContacts, subject, content, xlsxFileName):
+def createNewEmailMessage(EMAIL_ADDRESS, listOfContacts, subject, content, xlsxFileName):
   msg = EmailMessage()
   msg['Subject'] = subject
   msg['From'] = EMAIL_ADDRESS
   msg['To'] = ', '.join(listOfContacts)
   msg.set_content(content)
-
+  
   with open(xlsxFileName, 'rb') as f:
     file_data = f.read()
     file_name = f.name
 
   msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename = file_name)
+  return msg
 
+def sendEmailWithXlsxAttachment(EMAIL_ADDRESS, PASSWORD, messages):
   context = ssl.create_default_context()
+  print('Email Prep Internal Done')
   try:
+    print('Starting Procedure')
     server = smtplib.SMTP('smtp.gmail.com', 587)
+    print('Connected to Server')
     server.ehlo()
+    print('Ehlo 1')
     server.starttls(context=context)
+    print('TLS Started')
     server.ehlo()
+    print('Ehlo 2')
     server.login(EMAIL_ADDRESS, PASSWORD)
-    server.send_message(msg)
+    print('Login Successful')
+    for msg in messages:
+      server.send_message(msg)
+      print('Sent Email')
   except Exception as e:
     print(e)
   finally:
+    print('Quitting server')
     server.quit()
 
 def generateExcelSheet(results, name, numOfSeats):
