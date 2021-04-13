@@ -106,5 +106,5 @@ class Classroom:
             sheet[f'A{value[0]}']
 
         #Save File once edits are made
-        workbook.save(filename=f"Excel/{self.name}_{str(datetime.datetime.now()).split(' ')[0]}.xlsx")
-        return f"Excel/{self.name}_{str(datetime.datetime.now()).split(' ')[0]}.xlsx"
+        workbook.save(filename=f"{self.name}_{str(datetime.datetime.now()).split(' ')[0]}.xlsx")
+        return f"{self.name}_{str(datetime.datetime.now()).split(' ')[0]}.xlsx"

@@ -127,7 +127,7 @@ def downloadZipFile(path):
     try:
         return send_file(f'{path}',
             mimetype = 'zip',
-            attachment_filename= f'{path}',
+            attachment_filename=f'{path}',
             as_attachment = True)
     except FileNotFoundError:
         abort(404)
@@ -146,7 +146,7 @@ def downloadExcelFile(path):
     classroom = Classroom(results[0], results[1], results[2], from_database = True)
     filepath = classroom.generateExcelReport()
     try:
-        return send_from_directory('Excel', filepath.split('/')[1], as_attachment=True)
+        return send_file(filepath, attachment_filename=filepath, as_attachment=True)
     except FileNotFoundError:
         abort(404)
 
