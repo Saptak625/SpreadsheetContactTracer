@@ -3,7 +3,7 @@ from user import User
 from helperFunctions import sendEmailWithXlsxAttachment
 import datetime
 import os
-from dbFunctions import fetchAllClassrooms
+from dbFunctions import fetchAllClassrooms, queryByPhysicalEntries
 import sqlite3
 
 def resetAndArchive():
@@ -18,6 +18,20 @@ def resetAndArchive():
         contacts = [classroom.owner.email]
         msg_subject = f"Report for Class {classroom.name} on {str(datetime.datetime.now()).split(' ')[0]}"
         msg_content = f"Attached is the report for Class {classroom.name} on {str(datetime.datetime.now()).split(' ')[0]}."
+        sendEmailWithXlsxAttachment(EMAIL_ADDRESS, PASSWORD, contacts, msg_subject, msg_content, filename)
+    #SEND ALL ADMIN EMAILS
+    connection = sqlite3.connect("sqlite.db")
+    cursor = connection.cursor()
+    physicalClassrooms = cursor.execute("SELECT name, numOfSeats FROM physicalclassroom").fetchall()
+    connection.commit()
+    connection.close()
+    for pc in physicalClassrooms:
+        results = queryByPhysicalEntries(pc[0])
+        filename = generateExcelSheet(results, pc[0], pc[1])
+        #SEND EMAILS TO EVERY TEACHER
+        contacts = [EMAIL_ADDRESS]
+        msg_subject = f"Report for Room {pc[0]} on {str(datetime.datetime.now()).split(' ')[0]}"
+        msg_content = f"Attached is the report for Room {pc[0]} on {str(datetime.datetime.now()).split(' ')[0]}."
         sendEmailWithXlsxAttachment(EMAIL_ADDRESS, PASSWORD, contacts, msg_subject, msg_content, filename)
     #CLEAR ALL ENTRIES
     connection = sqlite3.connect("sqlite.db")
@@ -37,9 +51,3 @@ def resetAndArchive():
     for item in test:
         if item.endswith(".zip") or item.endswith(".xlsx"):
             os.remove(item)
-    # filelist = [ f for f in os.listdir('Excel') ]
-    # for f in filelist:
-    #     os.remove(os.path.join('Excel', f))
-    # filelist = [ f for f in os.listdir('Zips') ]
-    # for f in filelist:
-    #     os.remove(os.path.join('Zips', f))

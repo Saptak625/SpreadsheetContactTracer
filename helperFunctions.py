@@ -42,6 +42,7 @@ def sendEmailWithXlsxAttachment(EMAIL_ADDRESS, PASSWORD, listOfContacts, subject
 def generateExcelSheet(results, name, numOfSeats):
     #Add Extra Empty Records
     valuesWithRecords = {i[3]: None for i in results}
+    print("Num Of Seats", numOfSeats)
     for desk in range(numOfSeats):
         if desk+1 not in valuesWithRecords:
             results.append(['', '', name, desk+1, ''])

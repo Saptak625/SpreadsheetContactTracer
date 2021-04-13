@@ -5,7 +5,7 @@ def init_db_local():
     #Creating and Initialing Table(Only execute once)
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
-    cursor.execute("CREATE TABLE classroom (name TEXT, numOfSeats INTEGER, owner TEXT, ownerEmail TEXT)")
+    cursor.execute("CREATE TABLE classroom (name TEXT, physicalclassroom TEXT, numOfSeats INTEGER, owner TEXT, ownerEmail TEXT)")
     cursor.execute("CREATE TABLE entries (name TEXT, email TEXT, classroomid TEXT, deskNumber INTEGER, entryTime TEXT)")
     cursor.execute("CREATE TABLE physicalclassroom (name TEXT, numOfSeats INTEGER)")
     connection.commit()
@@ -14,7 +14,7 @@ def init_db_local():
 def addClassroom(classroom):
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO classroom VALUES (?, ?, ?, ?)", [classroom.name, classroom.numOfSeats, classroom.owner.name, classroom.owner.email])
+    cursor.execute("INSERT INTO classroom VALUES (?, ?, ?, ?, ?)", [classroom.name, classroom.roomId, classroom.numOfSeats, classroom.owner.name, classroom.owner.email])
     connection.commit()
     connection.close()
     #Check if physical classroom exists
@@ -33,7 +33,7 @@ def queryByName(queryName):
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
     results = cursor.execute(
-    "SELECT name, numOfSeats, owner, ownerEmail FROM classroom WHERE name = ?",
+    "SELECT name, physicalclassroom, numOfSeats, owner, ownerEmail FROM classroom WHERE name = ?",
     (queryName,),).fetchone()
     connection.commit()
     connection.close()
@@ -43,7 +43,7 @@ def getClassroomsByUser(user):
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
     results = cursor.execute(
-    "SELECT name, numOfSeats, owner, ownerEmail FROM classroom WHERE ownerEmail = ?",
+    "SELECT name, physicalclassroom, numOfSeats, owner, ownerEmail FROM classroom WHERE ownerEmail = ?",
     (user.email,),).fetchall()
     connection.commit()
     connection.close()
@@ -52,7 +52,7 @@ def getClassroomsByUser(user):
 def fetchAllClassrooms():
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
-    rows = cursor.execute("SELECT name, numOfSeats, owner, ownerEmail FROM classroom").fetchall()
+    rows = cursor.execute("SELECT name, physicalclassroom, numOfSeats, owner, ownerEmail FROM classroom").fetchall()
     connection.commit()
     connection.close()
     return rows
@@ -84,3 +84,15 @@ def checkPhysicalClassroom(physicalClassroom):
     connection.commit()
     connection.close()
     return results
+
+def queryByPhysicalEntries(physicalClassroom):
+    connection = sqlite3.connect("sqlite.db")
+    cursor = connection.cursor()
+    results = cursor.execute(
+    "SELECT name, physicalclassroom, numOfSeats, owner, ownerEmail FROM classroom WHERE physicalclassroom = ?",
+    (physicalClassroom,),).fetchall()
+    connection.commit()
+    connection.close()
+    newEntries = []
+    for classroom in results:
+        newEntries += queryForEntries(classroom)
