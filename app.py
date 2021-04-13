@@ -103,9 +103,10 @@ def recordEntry():
           abort(404)
         #Check if classroom exists in database
         databaseResults = queryByName(classroomid)
+        print('Database', databaseResults)
         if databaseResults == None:
            abort(404)
-        if not seat <= databaseResults[2]:
+        if not seat <= databaseResults[3]:
             abort(404)
         session['classroomid'] = classroomid
         session['seat'] = seat
@@ -117,12 +118,13 @@ def downloadZipFile(path):
         abort(403)
     #Check if classroom exists in database and user owns the class
     results = queryByName(path[:-4])
+    print('RESULTS', results, current_user, current_user.email)
     if results == None:
         abort(404)
-    if results[3] != current_user.email:
+    if results[4] != current_user.email:
         abort(403)
     #Class Exists -> generateQRCodes
-    classroom = Classroom(results[0], results[1], results[2], from_database = True)
+    classroom = Classroom(results[0], results[2], results[3], from_database = True)
     classroom.generateQRCodes()
     try:
         return send_file(f'{path}',
@@ -140,10 +142,10 @@ def downloadExcelFile(path):
     results = queryByName(path[:-5])
     if results == None:
         abort(404)
-    if results[3] != current_user.email:
+    if results[4] != current_user.email:
         abort(403)
     #Class Exists -> generateExcelReport
-    classroom = Classroom(results[0], results[1], results[2], from_database = True)
+    classroom = Classroom(results[0], results[2], results[3], from_database = True)
     filepath = classroom.generateExcelReport()
     try:
         return send_file(filepath, attachment_filename=filepath, as_attachment=True)

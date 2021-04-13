@@ -22,4 +22,4 @@ class CreateNewClassroomForm(FlaskForm):
         if result != None:
             print(form)
             if result[1] != field.data:
-                raise ValidationError("Num of Seats must match Num of Seats of other classes in same room.")
+                raise ValidationError(f"Num of Seats must match Num of Seats({result[1]}) of other classes in same room.")
