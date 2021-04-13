@@ -6,7 +6,7 @@ def init_db_local():
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE classroom (name TEXT, numOfSeats INTEGER, owner TEXT, ownerEmail TEXT)")
-    cursor.execute("CREATE TABLE entries (name TEXT, email TEXT, classroomid TEXT, physicalclassroomid TEXT, deskNumber INTEGER, entryTime TEXT)")
+    cursor.execute("CREATE TABLE entries (name TEXT, email TEXT, classroomid TEXT, deskNumber INTEGER, entryTime TEXT)")
     cursor.execute("CREATE TABLE physicalclassroom (name TEXT, numOfSeats INTEGER)")
     connection.commit()
     connection.close()
