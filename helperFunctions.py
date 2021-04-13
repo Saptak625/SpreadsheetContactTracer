@@ -22,7 +22,7 @@ def sendEmailWithXlsxAttachment(EMAIL_ADDRESS, PASSWORD, listOfContacts, subject
     file_data = f.read()
     file_name = f.name
 
-  msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename = file_name.split('/')[1])
+  msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename = file_name)
 
   context = ssl.create_default_context()
   try:

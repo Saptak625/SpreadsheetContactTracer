@@ -74,3 +74,13 @@ def queryForEntries(classroomid):
     connection.commit()
     connection.close()
     return results
+
+def checkPhysicalClassroom(physicalClassroom):
+    connection = sqlite3.connect("sqlite.db")
+    cursor = connection.cursor()
+    results = cursor.execute(
+    "SELECT name, numOfSeats FROM physicalclassroom WHERE name = ?",
+    (physicalClassroom,),).fetchone()
+    connection.commit()
+    connection.close()
+    return results

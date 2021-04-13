@@ -32,9 +32,14 @@ def resetAndArchive():
     connection.commit()
     connection.close()
     #EMPTY EXCEL AND ZIPS FOLDERS
-    filelist = [ f for f in os.listdir('Excel') ]
-    for f in filelist:
-        os.remove(os.path.join('Excel', f))
-    filelist = [ f for f in os.listdir('Zips') ]
-    for f in filelist:
-        os.remove(os.path.join('Zips', f))
+    test = os.listdir()
+    print(test)
+    for item in test:
+        if item.endswith(".zip") or item.endswith(".xlsx"):
+            os.remove(item)
+    # filelist = [ f for f in os.listdir('Excel') ]
+    # for f in filelist:
+    #     os.remove(os.path.join('Excel', f))
+    # filelist = [ f for f in os.listdir('Zips') ]
+    # for f in filelist:
+    #     os.remove(os.path.join('Zips', f))

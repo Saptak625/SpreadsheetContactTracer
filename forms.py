@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, DecimalField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 
-from dbFunctions import queryByName
+from dbFunctions import queryByName, checkPhysicalClassroom
 
 class CreateNewClassroomForm(FlaskForm):
     name = StringField('Name Of Class: ',
@@ -16,3 +16,10 @@ class CreateNewClassroomForm(FlaskForm):
         queryResults=queryByName(field.data)
         if queryResults != None:
             raise ValidationError("Name must be unique")
+
+    def validate_numOfSeats(form, field):
+        result = checkPhysicalClassroom(form.physicalName.data)
+        if result != None:
+            print(form)
+            if result[1] != field.data:
+                raise ValidationError("Num of Seats must match Num of Seats of other classes in same room.")
