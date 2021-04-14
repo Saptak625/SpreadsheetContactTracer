@@ -23,7 +23,9 @@ def generateQRCode(msg, filename):
   # font = ImageFont.truetype(<font-file>, <font-size>)
   font = ImageFont.truetype("Roboto-Regular.ttf", 30)
   # draw.text((x, y),"Sample Text",(r,g,b))
-  # draw.text((50, 50), "Sample Text", (255,255,255), font=font, fill=(0, 0, 0))
+  queryParameters = msg.split('?')[1].split('&')
+  text = queryParameters[0].split('=')[1] + " - " + queryParameters[1].split('=')[1]
+  draw.text((0, 0), text, (0,0,0), font=font)
   img.save(filename)
 
 #Emailer
