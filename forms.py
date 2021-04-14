@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, DecimalField, IntegerField, SelectField
+from wtforms import StringField, SubmitField, IntegerField, DateField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 
 from dbFunctions import queryByName, checkPhysicalClassroom
@@ -22,3 +22,10 @@ class CreateNewClassroomForm(FlaskForm):
         if result != None:
             if result[1] != field.data:
                 raise ValidationError(f"Num of Seats must match Num of Seats({result[1]}) of other classes in same room.")
+
+
+class ContactTracingForm(FlaskForm):
+    email = StringField('Student Email: ',
+                        validators=[DataRequired()])
+    startDate = DateField('Start Date', format='%m/%d/%Y')
+    submit = SubmitField('Find')

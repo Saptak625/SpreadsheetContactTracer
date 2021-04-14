@@ -18,7 +18,7 @@ import os
 from oauthlib.oauth2 import WebApplicationClient
 import requests
 
-from forms import CreateNewClassroomForm
+from forms import CreateNewClassroomForm, ContactTracingForm
 from Classroom import Classroom
 
 # Internal imports
@@ -167,7 +167,13 @@ def teacherHomepage():
 @app.route("/contacttrace")
 def contactTrace():
     #Do admin validation using dasd contact tracer email.
-    return """<h1>Contact Trace Page</h1>"""
+    form = ContactTracingForm()
+    submitted = False
+    if form.validate_on_submit():
+        email=str(request.form['email'])
+        startDate=int(request.form['startDate'])
+        submitted = True
+    return render_template("contacttrace.html", form=form, submitted = submitted)
 
 @app.route("/createclass", methods=['GET', 'Post'])
 def createClass():

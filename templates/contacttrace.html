@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirmation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        {% if not submitted %}
+            <h1>Admin Contact Tracing</h1>
+            <hr />
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid", style="border-color: #dc3545;") }}
+                        <div style="width: 100%; margin-top: .25rem; font-size: 80%; color: #dc3545;">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.startDate.label(class="form-control-label") }}
+                    {% if form.startDate.errors %}
+                        {{ form.startDate(class="form-control form-control-lg is-invalid", style="border-color: #dc3545;") }}
+                        <div style="width: 100%; margin-top: .25rem; font-size: 80%; color: #dc3545;">
+                            {% for error in form.startDate.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.startDate(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+        {% else %}
+        {% endif %}
+    </div>
+</body>
+</html>
