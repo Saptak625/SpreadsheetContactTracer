@@ -61,4 +61,4 @@ def resetAndArchive():
             os.remove(item)
     test = os.listdir('Old Excels')
     for item in test:
-        os.remove(item)
+        os.remove(f'Old Excels/{item}')
