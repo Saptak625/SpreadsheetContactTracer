@@ -150,11 +150,12 @@ def downloadExcelFile(path):
     except FileNotFoundError:
         abort(404)
 
-@app.route("/reset")
-def reset():
-    from reset import resetAndArchive
-    resetAndArchive()
-    return """<h1>RESET COMPLETE</h1>"""
+# Manual Reset only
+# @app.route("/reset")
+# def reset():
+#     from reset import resetAndArchive
+#     resetAndArchive()
+#     return """<h1>RESET COMPLETE</h1>"""
 
 @app.route("/teacherhomepage")
 def teacherHomepage():
@@ -162,6 +163,11 @@ def teacherHomepage():
         return render_template("teacherHomepage.html", current_user=current_user)
     else:
         return redirect(url_for('teacherLogin'))
+
+@app.route("/contacttrace")
+def contactTrace():
+    #Do admin validation using dasd contact tracer email.
+    return """<h1>Contact Trace Page</h1>"""
 
 @app.route("/createclass", methods=['GET', 'Post'])
 def createClass():
