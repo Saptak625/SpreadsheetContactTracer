@@ -6,10 +6,18 @@ from email.message import EmailMessage
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment
 import datetime
+from PIL import Image, ImageFont, ImageDraw 
 
 #QR Code Generator
 def generateQRCode(msg, filename):
   img = qrcode.make(msg)
+  img.save(filename)
+  img = Image.open(filename).convert('RGBA')
+  draw = ImageDraw.Draw(img)
+  # font = ImageFont.truetype(<font-file>, <font-size>)
+  font = ImageFont.truetype("Roboto-Regular.ttf", 30)
+  # draw.text((x, y),"Sample Text",(r,g,b))
+  draw.text((50, 50), "Sample Text", (255,255,255), font=font, fill=(0, 0, 0))
   img.save(filename)
 
 #Emailer
