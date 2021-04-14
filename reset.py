@@ -1,6 +1,6 @@
 from Classroom import Classroom
 from user import User
-from helperFunctions import sendEmailWithXlsxAttachment, generateExcelSheet, createNewEmailMessage
+from helperFunctions import sendEmailWithXlsxAttachment, generateExcelSheet, createNewEmailMessage, extractExcelRecords, fetchOldExcelSheets
 import datetime
 import os
 from dbFunctions import fetchAllClassrooms, queryByPhysicalEntries
@@ -39,16 +39,26 @@ def resetAndArchive():
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
     cursor.execute("DROP TABLE entries")
+    cursor.execute("DROP TABLE contacttraceentries")
     connection.commit()
     connection.close()
     #INIT ENTRIES TABLE
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE entries (name TEXT, email TEXT, classroomid TEXT, deskNumber INTEGER, entryTime TEXT)")
+    cursor.execute("CREATE TABLE contacttraceentries (name TEXT, email TEXT, physicalclassroom TEXT, deskNumber INTEGER, entryTime TEXT)")
     connection.commit()
     connection.close()
+    #Update contacttraceentries
+    fetchOldExcelSheets()
+    excels = os.listdir('Old Excels')
+    for e in excels:
+        extractExcelRecords(f'Old Excels/{e}')
     #EMPTY EXCEL AND ZIPS FOLDERS
     test = os.listdir()
     for item in test:
         if item.endswith(".zip") or item.endswith(".xlsx"):
             os.remove(item)
+    test = os.listdir('Old Excels')
+    for item in test:
+        os.remove(item)

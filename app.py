@@ -151,11 +151,11 @@ def downloadExcelFile(path):
         abort(404)
 
 # Manual Reset only
-# @app.route("/reset")
-# def reset():
-#     from reset import resetAndArchive
-#     resetAndArchive()
-#     return """<h1>RESET COMPLETE</h1>"""
+@app.route("/reset")
+def reset():
+    from reset import resetAndArchive
+    resetAndArchive()
+    return """<h1>RESET COMPLETE</h1>"""
 
 @app.route("/teacherhomepage")
 def teacherHomepage():

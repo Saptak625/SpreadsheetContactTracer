@@ -8,6 +8,7 @@ def init_db_local():
     cursor.execute("CREATE TABLE classroom (name TEXT, physicalclassroom TEXT, numOfSeats INTEGER, owner TEXT, ownerEmail TEXT)")
     cursor.execute("CREATE TABLE entries (name TEXT, email TEXT, classroomid TEXT, deskNumber INTEGER, entryTime TEXT)")
     cursor.execute("CREATE TABLE physicalclassroom (name TEXT, numOfSeats INTEGER)")
+    cursor.execute("CREATE TABLE contacttraceentries (name TEXT, email TEXT, physicalclassroom TEXT, deskNumber INTEGER, entryTime TEXT)")
     connection.commit()
     connection.close()
 
@@ -97,3 +98,10 @@ def queryByPhysicalEntries(physicalClassroom):
     for classroom in results:
         newEntries += queryForEntries(classroom[0])
     return newEntries
+
+def addNewContactTraceEntry(listOfData):
+    connection = sqlite3.connect("sqlite.db")
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO contacttraceentries VALUES (?, ?, ?, ?, ?)", [listOfData[0], listOfData[1], listOfData[2], listOfData[3], listOfData[4]])
+    connection.commit()
+    connection.close()

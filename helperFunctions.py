@@ -1,4 +1,5 @@
 import qrcode
+import openpyxl
 from openpyxl import load_workbook
 import os
 import smtplib, ssl
@@ -11,6 +12,7 @@ import imaplib
 import email
 from email.header import decode_header
 import webbrowser
+from dbFunctions import addNewContactTraceEntry
 
 #QR Code Generator
 def generateQRCode(msg, filename):
@@ -21,7 +23,7 @@ def generateQRCode(msg, filename):
   # font = ImageFont.truetype(<font-file>, <font-size>)
   font = ImageFont.truetype("Roboto-Regular.ttf", 30)
   # draw.text((x, y),"Sample Text",(r,g,b))
-  draw.text((50, 50), "Sample Text", (255,255,255), font=font, fill=(0, 0, 0))
+  # draw.text((50, 50), "Sample Text", (255,255,255), font=font, fill=(0, 0, 0))
   img.save(filename)
 
 #Emailer
@@ -163,3 +165,18 @@ def generateExcelSheet(results, name, numOfSeats):
     workbook.save(filename=f"{name}_{str(datetime.datetime.now()).split(' ')[0]}.xlsx")
     print('Excel Created')
     return f"{name}_{str(datetime.datetime.now()).split(' ')[0]}.xlsx"
+
+def extractExcelRecords(filepath):
+  #Get columns by (name TEXT, email TEXT, physicalclassroom TEXT, deskNumber INTEGER, entryTime TEXT)  
+  # to open the workbook 
+  # workbook object is created
+  wb_obj = openpyxl.load_workbook(filepath)
+  sheet_obj = wb_obj.active
+
+  for i in range(sheet_obj.max_row-1):
+    data = []
+    for j in range(1, sheet_obj.max_column + 1):
+      data.append(sheet_obj.cell(row = i+2, column = j).value)
+    if None not in data:
+      data = [data[1], data[2], filepath.split('/')[1].split('_')[0], data[0], filepath.split('/')[1].split('_')[1].replace('.xlsx', '') + ' ' + data[3]]
+      addNewContactTraceEntry(data)
