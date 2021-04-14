@@ -29,26 +29,17 @@ def createNewEmailMessage(EMAIL_ADDRESS, listOfContacts, subject, content, xlsxF
 
 def sendEmailWithXlsxAttachment(EMAIL_ADDRESS, PASSWORD, messages):
   context = ssl.create_default_context()
-  print('Email Prep Internal Done')
   try:
-    print('Starting Procedure')
     server = smtplib.SMTP('smtp.gmail.com', 587)
-    print('Connected to Server')
     server.ehlo()
-    print('Ehlo 1')
     server.starttls(context=context)
-    print('TLS Started')
     server.ehlo()
-    print('Ehlo 2')
     server.login(EMAIL_ADDRESS, PASSWORD)
-    print('Login Successful')
     for msg in messages:
       server.send_message(msg)
-      print('Sent Email')
   except Exception as e:
     print(e)
   finally:
-    print('Quitting server')
     server.quit()
 
 def generateExcelSheet(results, name, numOfSeats):

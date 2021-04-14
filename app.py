@@ -103,7 +103,6 @@ def recordEntry():
           abort(404)
         #Check if classroom exists in database
         databaseResults = queryByName(classroomid)
-        print('Database', databaseResults)
         if databaseResults == None:
            abort(404)
         if not seat <= databaseResults[3]:
@@ -118,7 +117,6 @@ def downloadZipFile(path):
         abort(403)
     #Check if classroom exists in database and user owns the class
     results = queryByName(path[:-4])
-    print('RESULTS', results, current_user, current_user.email)
     if results == None:
         abort(404)
     if results[4] != current_user.email:

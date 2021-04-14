@@ -20,6 +20,5 @@ class CreateNewClassroomForm(FlaskForm):
     def validate_numOfSeats(form, field):
         result = checkPhysicalClassroom(form.physicalName.data)
         if result != None:
-            print(form)
             if result[1] != field.data:
                 raise ValidationError(f"Num of Seats must match Num of Seats({result[1]}) of other classes in same room.")
