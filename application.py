@@ -187,7 +187,7 @@ def createClass():
             physicalName = str(request.form['physicalName'])
             classroom = Classroom(name, numOfSeats, current_user, roomId=physicalName)
             flash("Class Created Successfully!", 'success')
-            classInfo = {'name': name, 'numOfSeats': numOfSeats, 'qrPath': classroom.generateQRCodes()}
+            classInfo = {'name': name, 'numOfSeats': numOfSeats, 'qrPath': classroom.generateQRCodes(), 'physicalName': physicalName}
             submitted = True
         return render_template("createClass.html", form=form, classInfo=classInfo, submitted=submitted)
     else:
