@@ -6,6 +6,7 @@ def init_db_local():
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE classroom (name TEXT, physicalclassroom TEXT, numOfSeats INTEGER, owner TEXT, ownerEmail TEXT)")
+    cursor.execute("CREATE TABLE deskAssociations (deskId1 TEXT, deskId2 TEXT)")
     cursor.execute("CREATE TABLE entries (name TEXT, email TEXT, classroomid TEXT, deskNumber INTEGER, entryTime TEXT)")
     cursor.execute("CREATE TABLE physicalclassroom (name TEXT, numOfSeats INTEGER)")
     cursor.execute("CREATE TABLE contacttraceentries (name TEXT, email TEXT, physicalclassroom TEXT, deskNumber INTEGER, entryTime TIMESTAMP)")
@@ -16,6 +17,11 @@ def addClassroom(classroom):
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
     cursor.execute("INSERT INTO classroom VALUES (?, ?, ?, ?, ?)", [classroom.name, classroom.roomId, classroom.numOfSeats, classroom.owner.name, classroom.owner.email])
+    #Default all desk associations
+    for desk1 in range(classroom.numOfSeats):
+        for desk2 in range(classroom.numOfSeats):
+            if desk1 != desk2:
+                cursor.execute("INSERT INTO deskAssociations VALUES (?, ?)", [f'{classroom.roomId}_{desk1+1}', f'{classroom.roomId}_{desk2+1}'])
     connection.commit()
     connection.close()
     #Check if physical classroom exists
@@ -27,8 +33,6 @@ def addClassroom(classroom):
             cursor.execute("INSERT INTO physicalclassroom VALUES (?, ?)", [classroom.roomId, classroom.numOfSeats])
         connection.commit()
         connection.close()
-        return results
-
 
 def queryByName(queryName):
     connection = sqlite3.connect("sqlite.db")
