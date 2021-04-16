@@ -11,6 +11,7 @@ class CovidExposure():
 
   def fetchContactedUsers(self):
     #Query entries to find all locations.
+
     #For each location find all adjacent users
     #Create new CovidExposure for each user and append to subCases
-    print("Need to be implemented later")
+    print('Needs to implemented later.')

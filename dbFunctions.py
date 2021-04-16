@@ -109,3 +109,13 @@ def addNewContactTraceEntry(listOfData):
     cursor.execute("INSERT INTO contacttraceentries VALUES (?, ?, ?, ?, ?)", [listOfData[0], listOfData[1], listOfData[2], listOfData[3], listOfData[4]])
     connection.commit()
     connection.close()
+
+def queryContactTraceEntry(userEmail, upToDate):
+    connection = sqlite3.connect("sqlite.db")
+    cursor = connection.cursor()
+    results = cursor.execute(
+    "SELECT name, email, physicalclassroom, deskNumber, entryTime FROM contacttraceentries WHERE email = ?",
+    (username,),).fetchall()
+    connection.commit()
+    connection.close()
+    return results
