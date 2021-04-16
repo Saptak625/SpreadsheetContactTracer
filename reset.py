@@ -46,7 +46,7 @@ def resetAndArchive():
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE entries (name TEXT, email TEXT, classroomid TEXT, deskNumber INTEGER, entryTime TEXT)")
-    cursor.execute("CREATE TABLE contacttraceentries (name TEXT, email TEXT, physicalclassroom TEXT, deskNumber INTEGER, entryTime TEXT)")
+    cursor.execute("CREATE TABLE contacttraceentries (name TEXT, email TEXT, physicalclassroom TEXT, deskNumber INTEGER, entryTime TIMESTAMP)")
     connection.commit()
     connection.close()
     #Update contacttraceentries

@@ -13,6 +13,7 @@ import email
 from email.header import decode_header
 import webbrowser
 from dbFunctions import addNewContactTraceEntry
+import datetime
 
 #QR Code Generator
 def generateQRCode(msg, filename):
@@ -180,5 +181,6 @@ def extractExcelRecords(filepath):
     for j in range(1, sheet_obj.max_column + 1):
       data.append(sheet_obj.cell(row = i+2, column = j).value)
     if None not in data:
-      data = [data[1], data[2], filepath.split('/')[1].split('_')[0], data[0], filepath.split('/')[1].split('_')[1].replace('.xlsx', '') + ' ' + data[3]]
+      dateString = filepath.split('/')[1].split('_')[1].replace('.xlsx', '') + ' ' + data[3]
+      data = [data[1], data[2], filepath.split('/')[1].split('_')[0], data[0], datetime.datetime(dateString.split(' ')[0].split('-')[0], dateString.split(' ')[0].split('-')[1], dateString.split(' ')[0].split('-')[2], dateString.split(' ')[1].split(':')[0], dateString.split(' ')[1].split(':')[1], 0, 0)]
       addNewContactTraceEntry(data)
