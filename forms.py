@@ -27,5 +27,11 @@ class CreateNewClassroomForm(FlaskForm):
 class ContactTracingForm(FlaskForm):
     email = StringField('Student Email: ',
                         validators=[DataRequired()])
-    startDate = DateField('Start Date', format='%m/%d/%Y')
+    startDate = DateField('Start Date(m/d/yyyy):', format='%m/%d/%Y')
     submit = SubmitField('Find')
+
+    def validate_email(form, field):
+        print('Checking if email in user database')
+
+    def validate_startDate(form, field):
+        print('Validate date is less than 14 days')

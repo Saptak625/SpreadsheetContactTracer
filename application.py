@@ -2,6 +2,7 @@
 import json
 import os
 import sqlite3
+import datetime
 
 # Third-party libraries
 from flask import Flask, redirect, request, url_for, render_template, abort, session, flash, send_file, send_from_directory, safe_join
@@ -20,6 +21,7 @@ import requests
 
 from forms import CreateNewClassroomForm, ContactTracingForm
 from Classroom import Classroom
+from ContactTracingAlgorithm import CovidExposure
 
 # Internal imports
 from db import init_db_command
@@ -171,8 +173,11 @@ def contactTrace():
     submitted = False
     if form.validate_on_submit():
         email=str(request.form['email'])
-        startDate=int(request.form['startDate'])
-        submitted = True
+        dateList=request.form['startDate'].split('/')
+        startDate=datetime.datetime(dateList[2], dateList[0], dateList[1], 0, 0, 0, 0)
+        CovidExposure.numOfIterations = 3
+        startNode = CovidExposure(email, startDate)
+        submitted=True
     return render_template("contacttrace.html", form=form, submitted = submitted)
 
 @app.route("/createclass", methods=['GET', 'Post'])

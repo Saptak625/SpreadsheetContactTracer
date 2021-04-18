@@ -114,8 +114,28 @@ def queryContactTraceEntry(userEmail, upToDate):
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
     results = cursor.execute(
-    "SELECT name, email, physicalclassroom, deskNumber, entryTime FROM contacttraceentries WHERE email = ?",
-    (username,),).fetchall()
+    "SELECT name, email, physicalclassroom, deskNumber, entryTime FROM contacttraceentries WHERE email = ? AND entryTime <= ?",
+    (username, upToDate),).fetchall()
+    connection.commit()
+    connection.close()
+    return results
+
+def findAdjacentDesks(deskId):
+    connection = sqlite3.connect("sqlite.db")
+    cursor = connection.cursor()
+    results = cursor.execute(
+    "SELECT deskId1, deskId2 FROM deskAssociations WHERE deskId1 = ?",
+    (deskId),).fetchall()
+    connection.commit()
+    connection.close()
+    return results
+
+def getContactedEntries(physicalclassroom, deskNumber, startTime, endTime):
+    connection = sqlite3.connect("sqlite.db")
+    cursor = connection.cursor()
+    results = cursor.execute(
+    "SELECT name, email, physicalclassroom, deskNumber, entryTime FROM contacttraceentries WHERE physicalclassroom = ? AND deskNumber = ? AND entryTime >= ? AND entryTime <= ?",
+    (physicalclassroom, deskNumber, startTime, endTime),).fetchall()
     connection.commit()
     connection.close()
     return results
