@@ -166,7 +166,7 @@ def teacherHomepage():
     else:
         return redirect(url_for('teacherLogin'))
 
-@app.route("/contacttrace")
+@app.route("/contacttrace", methods=['GET', 'Post'])
 def contactTrace():
     #Do admin validation using dasd contact tracer email.
     form = ContactTracingForm()
@@ -174,10 +174,11 @@ def contactTrace():
     if form.validate_on_submit():
         email=str(request.form['email'])
         dateList=request.form['startDate'].split('/')
-        startDate=datetime.datetime(dateList[2], dateList[0], dateList[1], 0, 0, 0, 0)
-        CovidExposure.numOfIterations = 3
+        maxChainLength=request.form['maxChainLength']
+        startDate=datetime.datetime(int(dateList[2]), int(dateList[0]), int(dateList[1]), 0, 0, 0, 0)
+        CovidExposure.numOfIterations = maxChainLength
         startNode = CovidExposure(email, startDate)
-        submitted=True
+        submitted = True
     return render_template("contacttrace.html", form=form, submitted = submitted)
 
 @app.route("/createclass", methods=['GET', 'Post'])

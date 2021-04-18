@@ -27,7 +27,8 @@ class CreateNewClassroomForm(FlaskForm):
 class ContactTracingForm(FlaskForm):
     email = StringField('Student Email: ',
                         validators=[DataRequired()])
-    startDate = DateField('Start Date(m/d/yyyy):', format='%m/%d/%Y')
+    startDate = DateField('Start Date(m/d/yyyy): ', format='%m/%d/%Y', validators=[DataRequired()])
+    maxChainLength = IntegerField('Number of Iterations: ', validators=[DataRequired()])
     submit = SubmitField('Find')
 
     def validate_email(form, field):
