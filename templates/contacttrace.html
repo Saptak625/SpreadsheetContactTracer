@@ -41,6 +41,19 @@
                         {{ form.startDate(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
+                <div class="form-group">
+                    {{ form.maxChainLength.label(class="form-control-label") }}
+                    {% if form.maxChainLength.errors %}
+                        {{ form.maxChainLength(class="form-control form-control-lg is-invalid", style="border-color: #dc3545;") }}
+                        <div style="width: 100%; margin-top: .25rem; font-size: 80%; color: #dc3545;">
+                            {% for error in form.maxChainLength.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.maxChainLength(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
                 {{ form.submit(class="btn btn-primary") }}
             </form>
         {% else %}
