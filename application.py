@@ -174,7 +174,7 @@ def contactTrace():
     if form.validate_on_submit():
         email=str(request.form['email'])
         dateList=request.form['startDate'].split('/')
-        maxChainLength=request.form['maxChainLength']
+        maxChainLength=int(request.form['maxChainLength'])
         startDate=datetime.datetime(int(dateList[2]), int(dateList[0]), int(dateList[1]), 0, 0, 0, 0)
         CovidExposure.numOfIterations = maxChainLength
         startNode = CovidExposure(email, startDate)
