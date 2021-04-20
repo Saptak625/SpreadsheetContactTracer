@@ -106,7 +106,7 @@ def queryByPhysicalEntries(physicalClassroom):
 def addNewContactTraceEntry(listOfData):
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO contacttraceentries VALUES (?, ?, ?, ?, ?)", [listOfData[0], listOfData[1], listOfData[2], listOfData[3], listOfData[4]])
+    cursor.execute("INSERT INTO contacttraceentries VALUES (?, ?, ?, ?, ?)", [listOfData[0], listOfData[1], listOfData[2], int(listOfData[3]), listOfData[4]])
     connection.commit()
     connection.close()
 

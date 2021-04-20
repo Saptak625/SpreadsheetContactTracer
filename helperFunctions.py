@@ -182,5 +182,5 @@ def extractExcelRecords(filepath):
       data.append(sheet_obj.cell(row = i+2, column = j).value)
     if None not in data:
       dateString = filepath.split('/')[1].split('_')[1].replace('.xlsx', '') + ' ' + data[3]
-      data = [data[1], data[2], filepath.split('/')[1].split('_')[0], data[0], datetime.datetime(dateString.split(' ')[0].split('-')[0], dateString.split(' ')[0].split('-')[1], dateString.split(' ')[0].split('-')[2], dateString.split(' ')[1].split(':')[0], dateString.split(' ')[1].split(':')[1], 0, 0)]
+      data = [data[1], data[2], filepath.split('/')[1].split('_')[0], data[0], datetime.datetime(int(dateString.split(' ')[0].split('-')[0]), int(dateString.split(' ')[0].split('-')[1]), int(dateString.split(' ')[0].split('-')[2]), int(dateString.split(' ')[1].split(':')[0]), int(dateString.split(' ')[1].split(':')[1]), 0, 0)]
       addNewContactTraceEntry(data)
