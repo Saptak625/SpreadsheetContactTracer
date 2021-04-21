@@ -39,11 +39,11 @@ class CovidExposure():
     return False
 
   def parseResultsInto1DList(self):
-    1DList = [self]
+    flattenedList = [self]
     for child in self.subCases:
-      1DList += child.parseResultsInto1DList()
-    del 1DList[0]
+      flattenedList += child.parseResultsInto1DList()
+    del flattenedList[0]
     def sortByIterations(e):
       return e.iteration
-    1DList.sort(key=sortByIterations)
-    return 1DList 
+    flattenedList.sort(key=sortByIterations)
+    return flattenedList 

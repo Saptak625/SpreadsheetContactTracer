@@ -19,7 +19,7 @@ import os
 from oauthlib.oauth2 import WebApplicationClient
 import requests
 
-from forms import CreateNewClassroomForm, ContactTracingForm
+from forms import CreateNewClassroomForm, ContactTracingForm, DeskAssociationsForm
 from Classroom import Classroom
 from ContactTracingAlgorithm import CovidExposure
 
@@ -112,6 +112,16 @@ def recordEntry():
         session['classroomid'] = classroomid
         session['seat'] = seat
         return redirect(url_for('studentLogin'))
+
+@app.route('/deskassociations/<path:path>', methods=['GET', 'POST'])
+def deskAssociations(path):
+    #Do validation on class ownership etc.
+    form = DeskAssociationsForm()
+    submitted = False
+    if form.validate_on_submit():
+        submitted = True
+    return render_template("deskassociations.html", form=form, submitted = submitted)
+
 
 @app.route('/Zips/<path:path>', methods=['GET', 'POST'])
 def downloadZipFile(path):

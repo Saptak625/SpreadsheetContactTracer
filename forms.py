@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField, DateField
+from wtforms import StringField, SubmitField, IntegerField, DateField, BooleanField, FieldList, FormField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 
 from dbFunctions import queryByName, checkPhysicalClassroom, checkEmailInDatabase
@@ -41,3 +41,13 @@ class ContactTracingForm(FlaskForm):
         currentDate = datetime.date.today()
         if currentDate - field.data > datetime.timedelta(days=14):
             raise ValidationError(f"Date must be within 14 days.")
+
+class CheckBox(FlaskForm):
+    checkbox=BooleanField('Desk', default=True)
+
+class ListOfCheckBoxes(FlaskForm):
+    listOfChecks=FieldList(FormField(CheckBox), min_entries=3)
+
+class DeskAssociationsForm(FlaskForm):
+    desks=FieldList(FormField(ListOfCheckBoxes), min_entries=3)
+    submit = SubmitField('Submit') 
