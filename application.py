@@ -36,32 +36,30 @@ GOOGLE_DISCOVERY_URL = (
 )
 
 # Flask app setup
-app = Flask(__name__)
+application = Flask(__name__)
 # app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
-app.config['SECRET_KEY'] = '7b7e30111ddc1f8a5b1d80934d336798'
+application.config['SECRET_KEY'] = '7b7e30111ddc1f8a5b1d80934d336798'
 
 # User session management setup
 # https://flask-login.readthedocs.io/en/latest
 login_manager = LoginManager()
-login_manager.init_app(app)
+login_manager.init_app(application)
 
 # Naive database setup
-try:
-    init_db_command()
-except sqlite3.OperationalError:
-    # Assume it's already been created
-    pass
+# try:
+#     init_db_command()
+# except sqlite3.OperationalError:
+#     # Assume it's already been created
+#     pass
 
-try:
-    init_db_local()
-except sqlite3.OperationalError:
-    # Assume it's already been created
-    pass
+# try:
+#     init_db_local()
+# except sqlite3.OperationalError:
+#     # Assume it's already been created
+#     pass
 
 # OAuth 2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
-
-queryParameters = []
 
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
@@ -71,7 +69,7 @@ def load_user(user_id):
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
-@app.route("/manageclasses")
+@application.route("/manageclasses")
 def manageClasses():
     if current_user.is_authenticated:
         #Get all classes owned by user.
@@ -80,7 +78,7 @@ def manageClasses():
     else:
         return redirect(url_for('teacherLogin'))
 
-@app.route("/recordentry")
+@application.route("/recordentry")
 def recordEntry():
     if current_user.is_authenticated:
         if 'classroomid' not in session and 'seat' not in session:
@@ -113,7 +111,7 @@ def recordEntry():
         session['seat'] = seat
         return redirect(url_for('studentLogin'))
 
-@app.route('/deskassociations/<path:path>', methods=['GET', 'POST'])
+@application.route('/deskassociations/<path:path>', methods=['GET', 'POST'])
 def deskAssociations(path):
     #Do validation on class ownership etc.
     form = DeskAssociationsForm()
@@ -123,7 +121,7 @@ def deskAssociations(path):
     return render_template("deskassociations.html", form=form, submitted = submitted)
 
 
-@app.route('/Zips/<path:path>', methods=['GET', 'POST'])
+@application.route('/Zips/<path:path>', methods=['GET', 'POST'])
 def downloadZipFile(path):
     if not current_user.is_authenticated:
         abort(403)
@@ -144,7 +142,7 @@ def downloadZipFile(path):
     except FileNotFoundError:
         abort(404)
 
-@app.route('/Excel/<path:path>', methods=['GET', 'POST'])
+@application.route('/Excel/<path:path>', methods=['GET', 'POST'])
 def downloadExcelFile(path):
     if not current_user.is_authenticated:
         abort(403)
@@ -163,20 +161,20 @@ def downloadExcelFile(path):
         abort(404)
 
 # Manual Reset only
-@app.route("/reset")
+@application.route("/reset")
 def reset():
     from reset import resetAndArchive
     resetAndArchive()
     return """<h1>RESET COMPLETE</h1>"""
 
-@app.route("/teacherhomepage")
+@application.route("/teacherhomepage")
 def teacherHomepage():
     if current_user.is_authenticated:
         return render_template("teacherHomepage.html", current_user=current_user)
     else:
         return redirect(url_for('teacherLogin'))
 
-@app.route("/contacttrace", methods=['GET', 'Post'])
+@application.route("/contacttrace", methods=['GET', 'Post'])
 def contactTrace():
     #Do admin validation using dasd contact tracer email.
     form = ContactTracingForm()
@@ -191,7 +189,7 @@ def contactTrace():
         submitted = True
     return render_template("contacttrace.html", form=form, submitted = submitted)
 
-@app.route("/createclass", methods=['GET', 'Post'])
+@application.route("/createclass", methods=['GET', 'Post'])
 def createClass():
     if current_user.is_authenticated:
         form = CreateNewClassroomForm()
@@ -209,14 +207,13 @@ def createClass():
     else:
         return redirect(url_for('teacherLogin'))
 
-@app.route("/teacherprelogin")
+@application.route("/teacherprelogin")
 def teacherPrelogin():
     logout_user()
     flash('Logout Successful!', 'success')
     return render_template("teacherPrelogin.html")
 
-
-@app.route("/studentlogin")
+@application.route("/studentlogin")
 def studentLogin():
     # Find out what URL to hit for Google login
     google_provider_cfg = get_google_provider_cfg()
@@ -231,7 +228,7 @@ def studentLogin():
     )
     return redirect(request_uri)
 
-@app.route("/studentlogin/callback")
+@application.route("/studentlogin/callback")
 def studentCallback():
     # Get authorization code Google sent back to you
     code = request.args.get("code")
@@ -288,7 +285,7 @@ def studentCallback():
     # Send user back to homepage
     return redirect(url_for("recordEntry"))
 
-@app.route("/teacherlogin")
+@application.route("/teacherlogin")
 def teacherLogin():
     # Find out what URL to hit for Google login
     google_provider_cfg = get_google_provider_cfg()
@@ -303,7 +300,7 @@ def teacherLogin():
     )
     return redirect(request_uri)
 
-@app.route("/teacherlogin/callback")
+@application.route("/teacherlogin/callback")
 def teacherCallback():
     # Get authorization code Google sent back to you
     code = request.args.get("code")
@@ -367,6 +364,4 @@ def teacherCallback():
 
 if __name__ == "__main__":
     #Development only
-    app.run(debug=True, ssl_context="adhoc")
-    #Production only
-    # app.run(host = '0.0.0.0', ssl_context="adhoc")
+    application.run(debug=True, ssl_context="adhoc")
