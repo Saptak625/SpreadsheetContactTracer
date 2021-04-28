@@ -1,3 +1,4 @@
+appdirs==1.4.4
 beautifulsoup4==4.9.3
 bs4==0.0.1
 certifi==2020.12.5
@@ -7,11 +8,13 @@ click==7.1.2
 colorama==0.4.4
 cryptography==3.4.6
 cycler==0.10.0
+distlib==0.3.1
 dnspython==2.1.0
 email-validator==1.1.2
 essential-generators==1.0
 et-xmlfile==1.0.1
-Flask==1.0.2
+filelock==3.0.12
+Flask==1.1.2
 Flask-Login==0.4.1
 Flask-WTF==0.14.3
 idna==2.8
@@ -44,6 +47,7 @@ soupsieve==2.2.1
 tqdm==4.57.0
 tweepy==3.10.0
 urllib3==1.24.3
+virtualenv==20.4.4
 Werkzeug==1.0.1
 WTForms==2.3.3
 xlrd==2.0.1

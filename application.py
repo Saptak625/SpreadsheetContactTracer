@@ -25,7 +25,7 @@ from ContactTracingAlgorithm import CovidExposure
 
 # Internal imports
 from db import init_db_command
-from dbFunctions import init_db_local, queryByName, createNewEntry, getClassroomsByUser
+from dbFunctions import init_db_local, queryByName, createNewEntry, getClassroomsByUser, checkDeskOwnership
 from user import User
 
 # Configuration
@@ -114,8 +114,14 @@ def recordEntry():
 @application.route('/deskassociations/<path:path>', methods=['GET', 'POST'])
 def deskAssociations(path):
     #Do validation on class ownership etc.
+    databaseResults = checkDeskOwnership(path)
+    if databaseResults == None:
+        abort(404)
+    if databaseResults[-1] != current_user.email:
+        abort(403)
     form = DeskAssociationsForm()
     submitted = False
+    print(form.desks())
     if form.validate_on_submit():
         submitted = True
     return render_template("deskassociations.html", form=form, submitted = submitted)
@@ -179,6 +185,7 @@ def contactTrace():
     #Do admin validation using dasd contact tracer email.
     form = ContactTracingForm()
     submitted = False
+    results = None
     if form.validate_on_submit():
         email=str(request.form['email'])
         dateList=request.form['startDate'].split('/')
@@ -187,7 +194,8 @@ def contactTrace():
         CovidExposure.numOfIterations = maxChainLength
         startNode = CovidExposure(email, startDate)
         submitted = True
-    return render_template("contacttrace.html", form=form, submitted = submitted)
+        results = startNode.parseResultsInto1DList()
+    return render_template("contacttrace.html", form=form, submitted = submitted, results=results)
 
 @application.route("/createclass", methods=['GET', 'Post'])
 def createClass():

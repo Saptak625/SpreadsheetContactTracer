@@ -146,8 +146,18 @@ def checkEmailInDatabase(email):
     connection = sqlite3.connect("sqlite.db")
     cursor = connection.cursor()
     results = cursor.execute(
-    "SELECT name, email, physicalclassroom, deskNumber, entryTime FROM contacttraceentries WHERE email = ?",
+    "SELECT id, name, email, profile_pic FROM user WHERE email = ?",
     (email,),).fetchone()
+    connection.commit()
+    connection.close()
+    return results
+
+def checkDeskOwnership(classroomName):
+    connection = sqlite3.connect("sqlite.db")
+    cursor = connection.cursor()
+    results = cursor.execute(
+    "SELECT name, physicalclassroom, numOfSeats, owner, ownerEmail FROM classroom WHERE name = ?",
+    (classroomName,),).fetchone()
     connection.commit()
     connection.close()
     return results
