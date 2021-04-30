@@ -15,9 +15,13 @@ from flask_login import (
 )
 import zipfile
 import os
+from bs4 import BeautifulSoup
+import lxml
+import re
 
 from oauthlib.oauth2 import WebApplicationClient
 import requests
+from markupsafe import Markup
 
 from forms import CreateNewClassroomForm, ContactTracingForm, DeskAssociationsForm
 from Classroom import Classroom
@@ -120,11 +124,42 @@ def deskAssociations(path):
     if databaseResults[-1] != current_user.email:
         abort(403)
     form = DeskAssociationsForm()
+    print(type(form.desks()))
+    soup = BeautifulSoup(form.desks(), 'lxml')
+
+    questions = soup.find_all('label')
+
+    checkboxLabels = []
+    counter = 1
+    for question in questions:
+      # Replace the already stored text with 
+      # the new text which you wish to assign
+      if len(re.findall(r'Desks-.', question.text)) > 0:
+        new_text = question.find(text=re.compile(question.text)).replace_with(f'Desk {counter} Associations:')
+        counter += 1
+      elif len(re.findall(r'Desk', question.text)) > 0:
+        checkboxLabels.append((question, int(question['for'][6]), int(question['for'][-10])))
+      else:
+        question.decompose()
+
+    for label, i1, i2 in checkboxLabels:
+      new_text = label.find(text=re.compile(label.text)).replace_with(f'Desk {i2+1 + (1 if i2 >= i1 else 0)}: ')
+    #tagsToRemove = ['ul', 'li', 'table', 'tbody', 'tr', 'td']
+    tagsToRemove = ['li', 'ul']
+    for tag in tagsToRemove:
+      search = soup.find_all(tag)
+      for result in search:
+        child = soup.new_tag('div')
+        child.contents = result.contents
+        result.replace_with(child)
     submitted = False
-    print(form.desks())
     if form.validate_on_submit():
         submitted = True
-    return render_template("deskassociations.html", form=form, submitted = submitted)
+        #Get Data into usable dict
+        dataDict = {}
+        rawData = request.form['desks']
+        print(rawData)
+    return render_template("deskassociations.html", form=form, submitted = submitted, deskRender=Markup(soup.prettify().replace('\n', '')))
 
 
 @application.route('/Zips/<path:path>', methods=['GET', 'POST'])
