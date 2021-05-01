@@ -16,7 +16,9 @@
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
+                    {{ form.desks() }}
                     {{ deskRender }}
+                    }
                 </div>
                 {{ form.submit(class="btn btn-primary") }}
             </form>

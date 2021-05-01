@@ -162,5 +162,26 @@ def checkDeskOwnership(classroomName):
     connection.close()
     return results
 
+def getDeskAssociations(classinfo):
+    #Get deskIDs
+    deskIDs = [f'{classinfo[1]}_{i+1}' for i in range(classinfo[2])]
+    connection = sqlite3.connect("sqlite.db")
+    cursor = connection.cursor()
+    results = []
+    for deskId in deskIDs:
+        rawData = cursor.execute(
+        "SELECT deskId1, deskId2 FROM deskAssociations WHERE deskId1 = ? AND deskId2 != ?",
+        (deskId, deskId),).fetchall()
+        defaultResults = [False for i in range(classinfo[2])]
+        for associations in rawData:
+            defaultResults[int(associations[1].split('_')[1])-1] = True
+        print(len(defaultResults))
+        defaultResults.pop(int(deskId.split('_')[1])-1)
+        print(len(defaultResults))
+        results.append(defaultResults) 
+    connection.commit()
+    connection.close()
+    return results
+
 def updateDeskAssociations(deskResults):
     print(deskResults)

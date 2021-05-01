@@ -46,8 +46,8 @@ class CheckBox(FlaskForm):
     checkbox=BooleanField('Desk', default=True)
 
 class ListOfCheckBoxes(FlaskForm):
-    listOfChecks=FieldList(FormField(CheckBox), min_entries=3)
+    listOfChecks=FieldList(FormField(CheckBox), min_entries=1)
 
 class DeskAssociationsForm(FlaskForm):
-    desks=FieldList(FormField(ListOfCheckBoxes), min_entries=3)
-    submit = SubmitField('Submit') 
+    desks=FieldList(FormField(ListOfCheckBoxes), min_entries=1)
+    submit = SubmitField('Submit')

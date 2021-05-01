@@ -17,6 +17,7 @@ import zipfile
 import os
 from bs4 import BeautifulSoup
 import lxml
+from collections import namedtuple
 import re
 
 from oauthlib.oauth2 import WebApplicationClient
@@ -29,7 +30,7 @@ from ContactTracingAlgorithm import CovidExposure
 
 # Internal imports
 from db import init_db_command
-from dbFunctions import init_db_local, queryByName, createNewEntry, getClassroomsByUser, checkDeskOwnership, updateDeskAssociations
+from dbFunctions import init_db_local, queryByName, createNewEntry, getClassroomsByUser, checkDeskOwnership, updateDeskAssociations, getDeskAssociations
 from user import User
 
 # Configuration
@@ -123,8 +124,18 @@ def deskAssociations(path):
         abort(404)
     if databaseResults[-1] != current_user.email:
         abort(403)
-    form = DeskAssociationsForm()
-    print(type(form.desks()))
+    classInfo=queryByName(path)
+    currentDeskAssociations = getDeskAssociations(classInfo)
+    Checkbox = namedtuple('Checkbox', ['checkbox'])
+    CheckboxList = namedtuple('CheckboxList', ['listOfChecks'])
+    Questions = namedtuple('Questions', ['desks'])
+    listOfCheckboxLists = []
+    for checkboxList in currentDeskAssociations:
+        newCheckboxList = CheckboxList([Checkbox([checkboxBool]) for checkboxBool in checkboxList])
+        listOfCheckboxLists.append(newCheckboxList)
+    questions = Questions(listOfCheckboxLists)
+    form = DeskAssociationsForm(obj=questions)
+
     soup = BeautifulSoup(form.desks(), 'lxml')
 
     questions = soup.find_all('label')
