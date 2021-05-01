@@ -29,7 +29,7 @@ from ContactTracingAlgorithm import CovidExposure
 
 # Internal imports
 from db import init_db_command
-from dbFunctions import init_db_local, queryByName, createNewEntry, getClassroomsByUser, checkDeskOwnership
+from dbFunctions import init_db_local, queryByName, createNewEntry, getClassroomsByUser, checkDeskOwnership, updateDeskAssociations
 from user import User
 
 # Configuration
@@ -157,8 +157,12 @@ def deskAssociations(path):
         submitted = True
         #Get Data into usable dict
         dataDict = {}
-        rawData = request.form['desks']
-        print(rawData)
+        processed_data = [[i["checkbox"] for i in j['listOfChecks']] for j in form.desks.data]
+        for i, results in enumerate(processed_data):
+            results.insert(i, None)
+        updateDeskAssociations(processed_data)
+        flash("Desk Associations Updated Successfully!", 'success')
+        return redirect(url_for('manageClasses'))
     return render_template("deskassociations.html", form=form, submitted = submitted, deskRender=Markup(soup.prettify().replace('\n', '')))
 
 

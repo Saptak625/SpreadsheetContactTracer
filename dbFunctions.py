@@ -161,3 +161,6 @@ def checkDeskOwnership(classroomName):
     connection.commit()
     connection.close()
     return results
+
+def updateDeskAssociations(deskResults):
+    print(deskResults)
