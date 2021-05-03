@@ -126,18 +126,15 @@ def deskAssociations(path):
         abort(403)
     classInfo=queryByName(path)
     currentDeskAssociations = getDeskAssociations(classInfo)
-    print(currentDeskAssociations)
     Checkbox = namedtuple('Checkbox', ['checkbox'])
     CheckboxList = namedtuple('CheckboxList', ['listOfChecks'])
     Questions = namedtuple('Questions', ['desks'])
     listOfCheckboxLists = []
     for checkboxList in currentDeskAssociations:
-        print('Current', checkboxList)
         newCheckboxList = CheckboxList([Checkbox([checkboxBool]) for checkboxBool in checkboxList])
         listOfCheckboxLists.append(newCheckboxList)
     questions = Questions(listOfCheckboxLists)
     form = DeskAssociationsForm(obj=questions)
-
     soup = BeautifulSoup(form.desks(), 'lxml')
 
     questions = soup.find_all('label')
@@ -157,8 +154,18 @@ def deskAssociations(path):
         question.decompose()
 
     for label, i1, i2 in checkboxLabels:
-      new_text = label.find(text=re.compile(label.text)).replace_with(f'Desk {i2+1 + (1 if i2 >= i1 else 0)}: ')
-    #tagsToRemove = ['ul', 'li', 'table', 'tbody', 'tr', 'td']
+      new_text = label.find(text=re.compile(label.text)).replace_with(f'Desk {i2+1 + (1 if i2 >= i1 else 0)}:')
+
+    flattenedList = []
+    for i in currentDeskAssociations:
+      flattenedList+=i
+
+    checkboxInputs = soup.find_all('input', attrs={'type': 'checkbox'})
+    #Change internal form values of checkboxes
+    for i, checkbox in enumerate(checkboxInputs):
+      if not flattenedList[i]:
+        checkbox['value'] = 'n'
+
     tagsToRemove = ['li', 'ul']
     for tag in tagsToRemove:
       search = soup.find_all(tag)
@@ -166,6 +173,13 @@ def deskAssociations(path):
         child = soup.new_tag('div')
         child.contents = result.contents
         result.replace_with(child)
+
+    finalText = soup.prettify()
+    replacementText = '###'
+    countOfChecked = finalText.count('checked=""')
+    for i in range(countOfChecked):
+      finalText = finalText.replace('checked=""', ( replacementText if flattenedList[i] else ''), 1)
+    finalText = finalText.replace(replacementText, 'checked=""')
     submitted = False
     if form.validate_on_submit():
         submitted = True
@@ -174,11 +188,10 @@ def deskAssociations(path):
         processed_data = [[i["checkbox"] for i in j['listOfChecks']] for j in form.desks.data]
         for i, results in enumerate(processed_data):
             results.insert(i, None)
-        print(processed_data)
         updateDeskAssociations(processed_data, classInfo)
         flash(f"Desk Associations for Class {path} Updated Successfully!", 'success')
         return redirect(url_for('manageClasses'))
-    return render_template("deskassociations.html", form=form, submitted = submitted, deskRender=Markup(soup.prettify().replace('\n', '')), classInfo=classInfo)
+    return render_template("deskassociations.html", form=form, submitted = submitted, deskRender=Markup(finalText.replace('\n', '')), classInfo=classInfo)
 
 
 @application.route('/Zips/<path:path>', methods=['GET', 'POST'])
