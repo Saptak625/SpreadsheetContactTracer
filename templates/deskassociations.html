@@ -9,10 +9,25 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand active" href="/teacherhomepage">DASD Desk Tracer</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="/createclass">Create Classes</a></li>
+                <li><a href="/manageclasses">Manage Classes</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/teacherprelogin"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
         {% if not submitted %}
             <h1>Desk Associations</h1>
             <hr />
+            <p>Edit your desk associations for Class {{ classInfo[0] }} here. These associations will be used for contact tracing. For each question, please select all neighboring desks(within 6 feet). Note that other teachers in this room may also edit these associations.</p>
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
                 <div class="form-group">

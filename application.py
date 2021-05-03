@@ -126,11 +126,13 @@ def deskAssociations(path):
         abort(403)
     classInfo=queryByName(path)
     currentDeskAssociations = getDeskAssociations(classInfo)
+    print(currentDeskAssociations)
     Checkbox = namedtuple('Checkbox', ['checkbox'])
     CheckboxList = namedtuple('CheckboxList', ['listOfChecks'])
     Questions = namedtuple('Questions', ['desks'])
     listOfCheckboxLists = []
     for checkboxList in currentDeskAssociations:
+        print('Current', checkboxList)
         newCheckboxList = CheckboxList([Checkbox([checkboxBool]) for checkboxBool in checkboxList])
         listOfCheckboxLists.append(newCheckboxList)
     questions = Questions(listOfCheckboxLists)
@@ -172,10 +174,11 @@ def deskAssociations(path):
         processed_data = [[i["checkbox"] for i in j['listOfChecks']] for j in form.desks.data]
         for i, results in enumerate(processed_data):
             results.insert(i, None)
-        updateDeskAssociations(processed_data)
-        flash("Desk Associations Updated Successfully!", 'success')
+        print(processed_data)
+        updateDeskAssociations(processed_data, classInfo)
+        flash(f"Desk Associations for Class {path} Updated Successfully!", 'success')
         return redirect(url_for('manageClasses'))
-    return render_template("deskassociations.html", form=form, submitted = submitted, deskRender=Markup(soup.prettify().replace('\n', '')))
+    return render_template("deskassociations.html", form=form, submitted = submitted, deskRender=Markup(soup.prettify().replace('\n', '')), classInfo=classInfo)
 
 
 @application.route('/Zips/<path:path>', methods=['GET', 'POST'])

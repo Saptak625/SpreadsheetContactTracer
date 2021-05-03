@@ -25,6 +25,15 @@
 </nav>
 
     <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <h1>Manage your Classes</h1>
         <hr>
         {% if classroomResults != [] %}
@@ -51,6 +60,10 @@
                               <div class="p-2">
                                     <span class="glyphicon glyphicon-list-alt"></span>
                                     <a href="Excel/{{ class[0] }}.xlsx">Excel Records</a>
+                              </div>
+                              <div class="p-2">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    <a href="deskassociations/{{ class[0] }}">Edit Associations</a>
                               </div>
                             </div>
                           </td>

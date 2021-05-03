@@ -172,16 +172,30 @@ def getDeskAssociations(classinfo):
         rawData = cursor.execute(
         "SELECT deskId1, deskId2 FROM deskAssociations WHERE deskId1 = ? AND deskId2 != ?",
         (deskId, deskId),).fetchall()
+        print(rawData)
         defaultResults = [False for i in range(classinfo[2])]
         for associations in rawData:
             defaultResults[int(associations[1].split('_')[1])-1] = True
-        print(len(defaultResults))
         defaultResults.pop(int(deskId.split('_')[1])-1)
-        print(len(defaultResults))
         results.append(defaultResults) 
     connection.commit()
     connection.close()
     return results
 
-def updateDeskAssociations(deskResults):
-    print(deskResults)
+def updateDeskAssociations(deskResults, classinfo):
+    #Delete all previous associations, except for same pair
+    connection = sqlite3.connect("sqlite.db")
+    cursor = connection.cursor()
+    deskIDs = [f'{classinfo[1]}_{i+1}' for i in range(classinfo[2])]
+    for deskId in deskIDs:
+        cursor.execute(
+            "DELETE FROM deskAssociations WHERE deskId1 = ?",
+            (deskId,),)
+        print(deskId)
+    for desk1, results in enumerate(deskResults):
+        for desk2, boolean in enumerate(results):
+            if boolean == True:
+                cursor.execute("INSERT INTO deskAssociations VALUES (?, ?)", (deskIDs[desk1], deskIDs[desk2]),)
+                print('Executing')
+    connection.commit()
+    connection.close()
