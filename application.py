@@ -149,7 +149,8 @@ def deskAssociations(path):
         new_text = question.find(text=re.compile(question.text)).replace_with(f'Desk {counter} Associations:')
         counter += 1
       elif len(re.findall(r'Desk', question.text)) > 0:
-        checkboxLabels.append((question, int(question['for'][6]), int(question['for'][-10])))
+        splitText = question['for'].split('-')
+        checkboxLabels.append((question, int(splitText[1]), int(splitText[3])))
       else:
         question.decompose()
 
